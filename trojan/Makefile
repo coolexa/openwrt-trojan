@@ -7,18 +7,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=trojan
-PKG_VERSION:=1.13.0
+PKG_VERSION:=1.14.0
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/trojan-gfw/trojan.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=842ad5bb07eb8bce035fb274571e586629a97c99
+PKG_SOURCE_VERSION:=18763b7529963efef8dcb01f50389a6f49213ae1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 CMAKE_INSTALL:=1
 PKG_BUILD_PARALLEL:=0
 
-PKG_BUILD_DEPENDS:=openssl1.1
+PKG_BUILD_DEPENDS:=openssl
 
 PKG_LICENSE:=GPL-3.0
 
@@ -38,7 +38,7 @@ TARGET_LDFLAGS += -flto
 TARGET_CXXFLAGS += -std=c++11
 
 TARGET_CXXFLAGS := $(filter-out -O%,$(TARGET_CXXFLAGS)) -O3
-MY_OPENSSL_DIR:=$(BUILD_DIR)/openssl1.1_staging_dir/usr
+#MY_OPENSSL_DIR:=$(BUILD_DIR)/openssl1.1_staging_dir/usr
 
 TARGET_CXXFLAGS += -ffunction-sections -fdata-sections
 TARGET_LDFLAGS += -Wl,--gc-sections
@@ -55,8 +55,8 @@ CMAKE_OPTIONS += \
 	-DENABLE_NAT=ON \
 	-DFORCE_TCP_FASTOPEN=OFF \
 	-DSYSTEMD_SERVICE=OFF \
-	-DOPENSSL_USE_STATIC_LIBS=TRUE \
-	-DBoost_DEBUG=ON \
+	-DOPENSSL_USE_STATIC_LIBS=FALSE \
+	-DBoost_DEBUG=OFF \
 	-DBoost_NO_BOOST_CMAKE=ON
 
 
@@ -66,7 +66,7 @@ define Package/trojan
 	CATEGORY:=Network
 	TITLE:=An unidentifiable mechanism that helps you bypass GFW
 	URL:=https://github.com/trojan-gfw/trojan
-	DEPENDS:=+libpthread +libstdcpp \
+	DEPENDS:=+libpthread +libstdcpp +libopenssl \
 		+boost +boost-system +boost-program_options +boost-date_time
 endef
 
